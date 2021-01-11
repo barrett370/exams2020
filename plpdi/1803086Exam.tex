@@ -348,26 +348,45 @@ the preamble, write your answers below.
                   \begin{prooftree}
                     \AXC{}
                     \RL{$\beta$}
-                    \UIC{$(\lambda x:\mathbb{N} Im)n \rightarrow_{v} Im$}
+                    \UIC{$(\lambda x:\mathbb{N}. Im)n \rightarrow_{v} Im$}
                   \end{prooftree}
 
                   \begin{prooftree}
                     \AXC{}
                     \RL{$\beta$}
-                    \UIC{$Im \equiv (\lambda x: \mathbb{N} x)n \rightarrow_{v} m$}
+                    \UIC{$Im \equiv (\lambda x: \mathbb{N}. x)n \rightarrow_{v} m$}
                   \end{prooftree}
 
+            \item an abstract \textit{stack} datatype can be defined as follows:
+
+                  \begin{align*}
+                    \texttt{pack } &\langle \texttt{Stack} , \langle s_{0}, \langle \texttt{push} , \langle \texttt{peek}, \texttt{pop}   \rangle  \rangle  \rangle  \rangle \\
+                                   &\texttt{ as }  \\ &\exists \texttt{stack}. \texttt{stack} \times ( \mathbb{N} \rightarrow \texttt{stack} \rightarrow \texttt{stack} \times \\
+                                   &( \texttt{stack} \rightarrow \mathbb{N} \rightarrow \mathbb{N}  \times \texttt{stack} \rightarrow \texttt{stack}  )   )
+                  \end{align*}
+                  \todo{Check type of ``pop''}
+
+                  Where:
+
+                  \begin{itemize}
+                    \item $s_{0} = \lambda \alpha .\lambda f: \mathbb{N} \rightarrow \alpha \rightarrow \alpha . \lambda x: \alpha . x$
+                    \item $\texttt{Stack } = \forall \alpha.( \mathbb{N} \rightarrow \alpha \rightarrow \alpha ) \rightarrow \alpha \rightarrow \alpha$
+                          \item \texttt{push, peek} and \texttt{pop}   are defined the same as in the exam booklet, over (concrete) the \texttt{Stack} type.
+                  \end{itemize}
           \end{enumerate}
   \end{enumerate}
 
 
 \end{question}
 \begin{question}
+\[
+  Y = \lambda y. (\lambda f. t(\lambda z.ffz))(\lambda f.t(\lambda z.ffz))
+\]
 
 \end{question}
 
 \begin{question}
-  Add more questions if necessary.
+  Add more questions if necessary. foo
 \end{question}
 
 \vspace*{1cm}
