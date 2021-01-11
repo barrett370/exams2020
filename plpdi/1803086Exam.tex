@@ -179,8 +179,185 @@ the preamble, write your answers below.
                   \begin{itemize}
                     \item $M_{1}$ is as defined the same as above.
                   \end{itemize}
-          \end{enumerate}
 
+                  $ \texttt{true } \in V$, $\therefore$ $(MFG) \texttt{false } \texttt{true } $ computes to a value.
+          \end{enumerate}
+    \item
+        \[
+        \texttt{Stack } = \forall \alpha.( \mathbb{N} \rightarrow \alpha \rightarrow \alpha ) \rightarrow \alpha \rightarrow \alpha
+        \]
+          \begin{enumerate}[label= (\roman*)]
+            \item
+                  \[
+                  \lambda \alpha.\lambda f: \mathbb{N} \rightarrow \alpha \rightarrow \alpha .\lambda x:\alpha .f 0(f 0 (f 1 x))
+                  \]
+            \item
+                  \[
+                  \texttt{peek} = \lambda d:\mathbb{N} .\lambda s: \texttt{Stack} .s \{ \mathbb{N} \rightarrow \mathbb{N} \} G I d
+                  \]
+                  Where:
+                  \begin{itemize}
+                    \item $G = \lambda n: \mathbb{N} .\lambda g: \mathbb{N} \rightarrow \mathbb{N} . \lambda x: \mathbb{N}. g n$
+                    \item $I = \lambda x: \mathbb{N} .x$
+                  \end{itemize}
+
+                  \begin{prooftree}
+
+                    \AXC{$\Pi_{1}$}
+
+                    \AXC{$\Pi_{2}$}
+
+                    \RL{\texttt{APP} }
+                    \BIC{$\Gamma \vdash s \{ \mathbb{N} \rightarrow \mathbb{N}  \} G : (\mathbb{N} \rightarrow \mathbb{N} ) \rightarrow (\mathbb{N} \rightarrow \mathbb{N} )$}
+
+                    \AXC{}
+                    \RL{\texttt{VAR} }
+                    \UIC{$\Gamma, x : \mathbb{N} \vdash x : \mathbb{N} $}
+                    \RL{\texttt{ABS} }
+                    \UIC{$\Gamma \vdash I : \mathbb{N} \rightarrow \mathbb{N} $}
+
+                    \RL{\texttt{APP} }
+                    \BIC{$\Gamma \vdash ((s \{ \mathbb{N} \rightarrow  \mathbb{N} \}G )I) : \mathbb{N} \rightarrow \mathbb{N}$}
+
+                    \AXC{}
+                    \RL{\texttt{VAR} }
+                    \UIC{$\Gamma \vdash d : \mathbb{N} $}
+
+                    \RL{\texttt{APP} }
+                    \BIC{$\Gamma,s:\texttt{Stack} \vdash ((s \{ \mathbb{N} \rightarrow \mathbb{N} \} G) I) d : \mathbb{N} \rightarrow \texttt{Stack} \rightarrow \mathbb{N} : \mathbb{N}  $}
+                    \RL{\texttt{ABS} }
+                    \UIC{$d:\mathbb{N} \vdash \lambda s: \texttt{Stack} .s \{ \mathbb{N} \rightarrow \mathbb{N} \} G I d : \mathbb{N} \rightarrow \texttt{Stack} \rightarrow \mathbb{N} : \texttt{Stack} \rightarrow \mathbb{N}  $}
+                    \RL{\texttt{ABS} }
+                    \UIC{$ \{  \} \vdash \lambda d: \mathbb{N} .\lambda s: \texttt{Stack} .s \{ \mathbb{N} \rightarrow \mathbb{N} \} G I d : \mathbb{N} \rightarrow \texttt{Stack} \rightarrow \mathbb{N}  $}
+                  \end{prooftree}
+
+
+                  Where:
+                  \begin{itemize}
+                    \item $\Pi_{1}=$
+                          \begin{prooftree}
+                            \AXC{}
+                            \RL{\texttt{VAR} }
+                            \UIC{$\Gamma \vdash s: \texttt{State} $}
+                            \RL{\texttt{TAPP} }
+                            \UIC{$\Gamma \vdash s \{ \mathbb{N} \rightarrow \mathbb{N}  \} : ( \mathbb{N} \rightarrow (\mathbb{N} \rightarrow \mathbb{N} ) \rightarrow (\mathbb{N} \rightarrow \mathbb{N} ) ) \rightarrow (\mathbb{N} \rightarrow \mathbb{N} ) \rightarrow (\mathbb{N} \rightarrow \mathbb{N} )$}
+                          \end{prooftree}
+                    \item $\Pi_{2}=$
+                          \begin{prooftree}
+                            \AXC{}
+                            \RL{\texttt{VAR} }
+                            \UIC{$\Gamma \vdash g : \mathbb{N} \rightarrow \mathbb{N} $}
+
+                            \AXC{}
+                            \RL{\texttt{VAR} }
+                            \UIC{$\Gamma \vdash n : \mathbb{N} $}
+
+                            \RL{\texttt{APP} }
+                            \BIC{$\Gamma,x:\mathbb{N} \vdash gn : \mathbb{N} $}
+                            \RL{\texttt{ABS} }
+                            \UIC{$\Gamma, g: \mathbb{N} \rightarrow \mathbb{N} \vdash \lambda x: \mathbb{N}. gn : \mathbb{N} \rightarrow \mathbb{N} $}
+                            \RL{\texttt{ABS} }
+                            \UIC{$\Gamma, n : \mathbb{N} \vdash \lambda g: \mathbb{N} \rightarrow \mathbb{N} . \lambda x:\mathbb{N} . gn : (\mathbb{N} \rightarrow \mathbb{N} ) \rightarrow \mathbb{N} \rightarrow \mathbb{N} $}
+                            \RL{\texttt{ABS} }
+                            \UIC{$\Gamma \vdash G : \mathbb{N} \rightarrow (\mathbb{N} \rightarrow \mathbb{N} ) \rightarrow \mathbb{N} \rightarrow \mathbb{N} $}
+                          \end{prooftree}
+                  \end{itemize}
+            \item
+                  Prove:
+                  \[
+                  \texttt{peek } d s_{2} \rightarrow_{v}^{*} m
+                  \]
+
+                    \begin{prooftree}
+                      \AXC{}
+                      \RL{$\beta$}
+                      \UIC{$(\lambda d:\mathbb{N} .\lambda s: \texttt{Stack} .s \{ \mathbb{N} \rightarrow \mathbb{N}  \} GId )d \rightarrow_{v} \lambda s: \texttt{Stack}.s \{ \mathbb{N} \rightarrow \mathbb{N}  \} GId $ }
+                      \RL{$\texttt{CTX}_{\bullet s_{2}}$}
+                      \UIC{$\texttt{peek } d s_{2} \rightarrow_{v} (\lambda s: \texttt{Stack}. s \{ \mathbb{N} \rightarrow \mathbb{N}  \} G I d )s_{2} $}
+                    \end{prooftree}
+
+                  \begin{prooftree}
+                    \AXC{}
+                    \RL{$\beta$}
+                    \UIC{$(\lambda s: \texttt{Stack} .s \{ \mathbb{N} \rightarrow \mathbb{N}  \} GId)s_{2} \rightarrow_{v} s_{2} \{ \mathbb{N} \rightarrow \mathbb{N}  \} GId $}
+                  \end{prooftree}
+
+                  \begin{prooftree}
+                    \AXC{}
+                    \RL{$T_{\beta}$}
+                    \UIC{\stackanchor{$\lambda \alpha . \lambda f: \mathbb{N} \rightarrow \alpha \rightarrow \alpha . \lambda x: \alpha . f n ( f m x ) \{ \mathbb{N} \rightarrow \mathbb{N}  \} \rightarrow_{v}  $}{$\lambda f: \mathbb{N} \rightarrow (\mathbb{N} \rightarrow \mathbb{N} )\rightarrow (\mathbb{N} \rightarrow \mathbb{N} ). \lambda x: (\mathbb{N} \rightarrow \mathbb{N} ). f n (f m x)$}}
+                    \RL{$\texttt{CTX} _{(\bullet G)I)d}$}
+                    \UIC{\stackanchor{$((s_{2} \{ \mathbb{N} \rightarrow \mathbb{N}  \} G)I)d \rightarrow_{v}$}{$ (((\lambda f: \mathbb{N} \rightarrow (\mathbb{N} \rightarrow \mathbb{N}) \rightarrow (\mathbb{N} \rightarrow \mathbb{N} ). \lambda x: \mathbb{N} \rightarrow \mathbb{N} . f n (f m x))G)I)d $}}
+                  \end{prooftree}
+
+                  \begin{prooftree}
+                    \AXC{}
+                    \RL{$\beta$}
+                    \UIC{\stackanchor{$(\lambda f: \mathbb{N} \rightarrow (\mathbb{N} \rightarrow \mathbb{N} )\rightarrow (\mathbb{N} \rightarrow \mathbb{N} ). \lambda x: \mathbb{N} \rightarrow \mathbb{N}. f n ( f m x))G \rightarrow_{v} $}{$\lambda x:\mathbb{N} \rightarrow \mathbb{N} . Gn(Gmx)$}}
+                    \RL{$\texttt{CTX} _{((\bullet)I)d}$}
+                    \UIC{\stackanchor{$ (((\lambda f: \mathbb{N} \rightarrow (\mathbb{N} \rightarrow \mathbb{N}) \rightarrow (\mathbb{N} \rightarrow \mathbb{N} ). \lambda x: \mathbb{N} \rightarrow \mathbb{N} . f n (f m x))G)I)d \rightarrow_{v} $}{$((\lambda x: \mathbb{N} \rightarrow \mathbb{N}. Gn(Gmx))I)d$}}
+                  \end{prooftree}
+
+                  \begin{prooftree}
+                    \AXC{}
+                    \RL{$\beta$}
+                    \UIC{$(\lambda x:\mathbb{N} \rightarrow \mathbb{N} . Gn(Gmx))I \rightarrow_{v} Gn(GmI)$}
+                    \RL{$\texttt{CTX} _{(\bullet)d}$}
+                    \UIC{$((\lambda x: \mathbb{N} \rightarrow \mathbb{N}. Gn(Gmx))I)d \rightarrow_{v} (Gn(GmI)d)$}
+                  \end{prooftree}
+
+                  \begin{prooftree}
+                    \AXC{}
+                    \RL{$\beta$}
+                    \UIC{$(\lambda n: \mathbb{N} . \lambda g: \mathbb{N} \rightarrow \mathbb{N} . \lambda x: \mathbb{N} . gn)n \rightarrow_{v} \lambda g: \mathbb{N} \rightarrow \mathbb{N} .\lambda x: \mathbb{N} . gn$}
+                    \RL{$\texttt{CTX} _{(\bullet(GmI))d}$}
+                    \UIC{$(Gn(GmI)d) \rightarrow_{v} ((\lambda g: \mathbb{N} \rightarrow \mathbb{N} . \lambda x:\mathbb{N} .gn)(GmI))d$}
+                  \end{prooftree}
+
+                  \begin{prooftree}
+                    \AXC{}
+                    \RL{$\beta$}
+                    \UIC{$(\lambda n: \mathbb{N} \lambda g: \mathbb{N} \rightarrow \mathbb{N} \lambda x: \mathbb{N} .gn)m \rightarrow_{v} \lambda g: \mathbb{N} \rightarrow \mathbb{N} . \lambda x: \mathbb{N} .gm$}
+                    \RL{$\texttt{CTX}_{((\lambda g: \mathbb{N} \rightarrow \mathbb{N} .\lambda x:\mathbb{N} .gn)(\bullet I))d} $}
+                    \UIC{\stackanchor{$((\lambda g: \mathbb{N} \rightarrow \mathbb{N} . \lambda x:\mathbb{N} . gn)(GmI))d \rightarrow_{v}  $}{$((\lambda g: \mathbb{N} \rightarrow \mathbb{N} . \lambda x:\mathbb{N} .gn)((\lambda g:\mathbb{N} \rightarrow \mathbb{N} .\lambda x:\mathbb{N} .gm)I))d$}}
+                  \end{prooftree}
+
+                  \begin{prooftree}
+                    \AXC{}
+                    \RL{$\beta$}
+                    \UIC{$(\lambda g: \mathbb{N} \rightarrow \mathbb{N} .\lambda x:\mathbb{N} .gm)I \rightarrow_{v} \lambda x:\mathbb{N} . Im$}
+                    \RL{$\texttt{CTX}_{((\lambda g: \mathbb{N} \rightarrow \mathbb{N} . \lambda x:\mathbb{N} .gn)(\bullet))d} $}
+                    \UIC{\stackanchor{$((\lambda g: \mathbb{N} \rightarrow \mathbb{N} . \lambda x:\mathbb{N} .gn)((\lambda g:\mathbb{N} \rightarrow \mathbb{N} .\lambda x:\mathbb{N} .gm)I))d \rightarrow_{v} $}{$((\lambda g:\mathbb{N} \rightarrow \mathbb{N} . \lambda x:\mathbb{N} .gn)(\lambda x:\mathbb{N} .Im))d$}}
+                  \end{prooftree}
+
+
+                  \begin{prooftree}
+                    \AXC{}
+                    \RL{$\beta$}
+                    \UIC{$(\lambda g: \mathbb{N} \rightarrow \mathbb{N} . \lambda x: \mathbb{N} . gn)(\lambda x: \mathbb{N} . Im) \rightarrow_{v}  \lambda x: \mathbb{N} . (\lambda x: \mathbb{N} Im)n$}
+                    \RL{$\texttt{CTX} _{(\bullet)d}$}
+                    \UIC{\stackanchor{$((\lambda g:\mathbb{N} \rightarrow \mathbb{N} . \lambda x:\mathbb{N} .gn)(\lambda x:\mathbb{N} .Im))d \rightarrow_{v} $}{$(\lambda x:\mathbb{N} .(\lambda x:\mathbb{N} .Im)n)d$}}
+                  \end{prooftree}
+
+                  \begin{prooftree}
+                    \AXC{}
+                    \RL{$\beta$}
+                    \UIC{$(\lambda x:\mathbb{N} .(\lambda x:\mathbb{N} .Im)n)d \rightarrow_{v} (\lambda x:\mathbb{N}. Im)n$}
+                  \end{prooftree}
+
+                  \begin{prooftree}
+                    \AXC{}
+                    \RL{$\beta$}
+                    \UIC{$(\lambda x:\mathbb{N} Im)n \rightarrow_{v} Im$}
+                  \end{prooftree}
+
+                  \begin{prooftree}
+                    \AXC{}
+                    \RL{$\beta$}
+                    \UIC{$Im \equiv (\lambda x: \mathbb{N} x)n \rightarrow_{v} m$}
+                  \end{prooftree}
+
+          \end{enumerate}
   \end{enumerate}
 
 
