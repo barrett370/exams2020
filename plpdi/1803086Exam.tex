@@ -6,11 +6,27 @@
   {\varwidth{.9\textwidth}\centering\leavevmode}
   {\DisplayProof\endvarwidth}
 
+\usepackage{graphicx}
+\graphicspath{{./imgs/}}
 \usepackage{amsmath,amssymb,amsfonts,varwidth}
 \usepackage{enumitem}
 \usepackage{bussproofs}
 \EnableBpAbbreviations{}
 \usepackage{stackengine}
+\usepackage{minted}
+%\usepackage{tikz}
+%\usetikzlibrary{arrows,shapes,automata,petri,positioning,calc,fit}
+%\tikzset{
+%    ASG/.style={
+%        circle,
+%        draw=black,
+%        minimum size=6mm,
+%    },
+%    initial text = {},
+%    node distance=2.5cm,
+%    double distance=2pt,
+%}
+
 % put your student ID here instead of 1234567
 
 \newcommand{\thestudentid}{1803086}
@@ -376,17 +392,118 @@ the preamble, write your answers below.
           \end{enumerate}
   \end{enumerate}
 
-
 \end{question}
+\newpage
 \begin{question}
 \[
   Y = \lambda y. (\lambda f. t(\lambda z.ffz))(\lambda f.t(\lambda z.ffz))
 \]
+\begin{enumerate}[label= (\alph*)]
+  \item
+        The following ASG was generated using SPARTAN and the following code:
+        \begin{minted}{text}
+          LAMBDA(;t.APP(
+   LAMBDA(; f.
+     APP(t, LAMBDA(; z.
+                    APP(APP(f,f),z))
+        )
+   ),
+   LAMBDA(; f.
+     APP(t, LAMBDA(; z.
+                    APP(APP(f,f),z))
+        )
+   )
+))
+        \end{minted}
+
+        \begin{center}
+          \includegraphics[scale=0.6]{YASG.png}
+        \end{center}
+  \item
+        \begin{enumerate}[label= (\roman*)]
+          \item
+               \[
+                Y(\lambda f.\lambda x.0)1
+                \]
+
+                \begin{center}
+                  \includegraphics[scale=0.5]{2bi.png}
+                \end{center}
+
+                Firstly, the ASG evaluate the LHS, finding values on either side of the first application, it performs a reduction, replacing $\lambda t.$ with $\lambda f.\lambda x.0$:
+
+                \begin{center}
+                  \includegraphics[scale=0.5]{2bi2.png}
+                \end{center}
+
+                It goes on to attempt to further evaluate the LHS, again finding two values either side of an application, the LH thunk is expanded attaching the RH value as its parameter:
+
+
+                \begin{center}
+                  \includegraphics[scale=0.6]{2bi3.png}
+                \end{center}
+
+                Next, the machine performs a rewrite of a shared reference of $\lambda f.\lambda x.0$:
+
+                \begin{center}
+                  \includegraphics[scale=0.6]{2bi4.png}
+                \end{center}
+
+                Again finding two values on the LHS application, a reduction is performed, stripping the outer $\lambda $ from $\lambda f.\lambda x.0$, discarding the $Y$ combinator:
+
+
+                \begin{center}
+                  \includegraphics[scale=0.6]{2bi5.png}
+                \end{center}
+
+                Finally, finding 2 values either side of our application the system removes the next $\lambda $, leaving just $0$, our final result from this computation:
+
+
+                \begin{center}
+                  \includegraphics[scale=0.6]{2bi6.png}
+                \end{center}
+
+          \item
+                \[
+                Y(\lambda f.\lambda x.f(x)*0)1
+                \]
+
+                This expression will diverge. This occurs as the second operand of the $*$ operator (1) is is never evaluated as our $Y$ combinator will infinitely expand over the first function argument $\lambda f.\lambda x.f(x)*0$
+
+                After 91 steps of execution the ASG abstract machine will be in the following state:
+
+                \begin{center}
+                  \includegraphics[scale=0.4]{2bii.png}
+                \end{center}
+
+                Intuitively, you can see that the second operand (1) is being pushed up as the $Y$ combinator duplicates the operation and first operand (0) infinitely.
+
+          \item
+                If we were to swap our operands to form an expression:
+
+                \[
+                Y(\lambda f.\lambda x.0*f(x))1
+                \]
+
+                This would terminate, due to the nature of our $*$ \textit{shortcut} operator which does not need to evaluate a second argument in the case where the first operand is 0.
+
+                After 26 steps of execution we reach the following state:
+
+                \begin{center}
+                  \includegraphics[scale=0.4]{2biii.png}
+                \end{center}
+
+                Here you can see that we have a state where we are attempting to evaluate $0*@$, with a traditional (eager) multiplication operator, we would find a value on the left and an expression on the right, forcing us to evaluate the RHS until we reach a value. However, our \textit{shortcut} operator allows us to instead skip this evaluate and return 0, eliminating the hang the Y combinator would otherwise cause.
+
+
+
+        \end{enumerate}
+\end{enumerate}
 
 \end{question}
 
 \begin{question}
-  Add more questions if necessary. foo
+  Add more questions if necessary. 
 \end{question}
 
 \vspace*{1cm}
