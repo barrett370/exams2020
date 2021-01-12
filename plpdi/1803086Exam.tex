@@ -14,18 +14,36 @@
 \EnableBpAbbreviations{}
 \usepackage{stackengine}
 \usepackage{minted}
-%\usepackage{tikz}
-%\usetikzlibrary{arrows,shapes,automata,petri,positioning,calc,fit}
-%\tikzset{
-%    ASG/.style={
-%        circle,
-%        draw=black,
-%        minimum size=6mm,
-%    },
-%    initial text = {},
-%    node distance=2.5cm,
-%    double distance=2pt,
-%}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,automata,petri,positioning,calc,fit}
+\tikzset{
+    ASG/.style={
+        circle,
+        draw=black,
+        minimum size=6mm,
+    },
+    lts/.style={
+        circle,
+        draw=black,
+        fill=blue!6,
+        minimum size=8mm,
+   },
+    prod/.style={
+        ellipse,
+        draw=black,
+        fill=yellow!20,
+        minimum size=8mm,
+   },
+    every edge/.style={
+        draw,
+        ->,>=stealth',
+        auto,
+        semithick
+    },
+    initial text = {},
+    node distance=2.5cm,
+    double distance=2pt,
+}
 
 % put your student ID here instead of 1234567
 
@@ -493,17 +511,144 @@ the preamble, write your answers below.
                   \includegraphics[scale=0.4]{2biii.png}
                 \end{center}
 
-                Here you can see that we have a state where we are attempting to evaluate $0*@$, with a traditional (eager) multiplication operator, we would find a value on the left and an expression on the right, forcing us to evaluate the RHS until we reach a value. However, our \textit{shortcut} operator allows us to instead skip this evaluate and return 0, eliminating the hang the Y combinator would otherwise cause.
+                Here you can see that we have a state where we are attempting to evaluate $0*@$, with a traditional (eager) multiplication operator, we would find a value on the left and an expression on the right, forcing us to evaluate the RHS until we reach a value. However, our \textit{shortcut} operator allows us to instead skip this evaluate and return 0, eliminating the hang the Y combinator would otherwise cause. Our final result would be:
 
-
+                \begin{center}
+                  \includegraphics[scale=0.6]{2bi6.png}
+                \end{center}
 
         \end{enumerate}
+  \item
+
+        \begin{enumerate}[label =(\roman*)]
+          \item
+                My answer to b)i) would not be affected. Nor would my answer to b)ii) as the cause of the infinite expansion was the first argument, not the second.
+
+                For b)iii) however, our answer would change. The program would no longer terminate as when it reached the state shown above, where $*$ is applied to a value (0) and an expression (@), it would be forced to expand the RHS application and create a similar infinite expansion as in b)ii) due to the use of the $Y$ combinator without a terminating condition.
+
+
+          \item
+                Because of the fact $\forall x, x*0 = 0*x = 0$, both $Y(\lambda f.\lambda x.f(x)*0)1$ and $Y(\lambda f.\lambda x.0*f(x))1$ can be optimised to $0$.
+                In the first case, $f(x) * 0$ can be replaced with $0$ where we let $f(x) = x$ in the above fact.
+                In the second case, $0*f(x)$ can be replaced with $0$ where we let $f(x) = x$ in the above fact.
+
+                \todo[inline]{is this a trick question, check notes on code optimisation}
+
+          \item
+                Yes $Y(\lambda f.\lambda x.0)1$ can be optimised to $0$. This is the case as the result of evaluating the expression is not dependant on either of the parameters $f$ or $x$.
+        \end{enumerate}
+
 \end{enumerate}
+
 
 \end{question}
 
 \begin{question}
-  Add more questions if necessary. 
+  \begin{enumerate}[label= (\alph*)]
+    \item
+          \begin{enumerate}[label= (\roman*)]
+            \item
+                  $a$ is true whenever $b$ is true. This is an example of an invariant, (a subset of \textit{safety properties}) as it can only be verified by checking $b \rightarrow a$ in each state individually. It can be represented in LTL as:
+                  \[
+                  \Box (b \rightarrow a)
+                  \]
+
+            \item
+                  $a$ and $b$ are simultaneously true only a finite number of times.
+
+                  This is a \textit{liveness property} as only an infinite path could satisfy $\Box(a \wedge b)$ and given such a path, we could easily extend it with a single state which satisfied $\neg (a \wedge b)$ to satisfy this property. In LTL it can be represented as: \todo[inline]{Check}
+
+
+                  \[
+                  \neg \Box (a \wedge b)
+                  \]
+
+            \item
+                  every $b$ is immediately followed by an $a$
+
+                  This is an example of a \textit{safety property} as any violation of this property would have a state satisfying $b$ (immediately) followed by a state satisfying $\neg a$. Such a trace cannot be extended to satisfy the property. It can be written in LTL as:\todo[inline]{check wording}
+
+
+                  \[
+                  \Box ( b \rightarrow \bigcirc a )
+                  \]
+
+            \item
+                  exactly one of $a$ or $b$ (but not both) is eventually true. This is a \textit{liveness property} as given a trace in which both $a$ and $b$ appear true at least once, no suffix can be added to extend the trace s.t. it satisfies this property.
+
+                  \todo[inline]{check}
+                  \[
+                  (\Diamond a \vee \Diamond b) \wedge (a \rightarrow \Box \neg b) \wedge (b \rightarrow \Box \neg a)
+                  \]
+
+            \item
+                  if $a$ ever becomes true, then it remains true forever, and this is immediately preceded by a state where $b$ was true.
+
+                  This is a \textit{liveness property} as given a trace that violates this property such as $a,b$, the trace cannot be extended with any suffix s.t. the property now holds.
+
+                  \[
+                  ((b \wedge \bigcirc a ) \rightarrow \bigcirc \bigcirc \Box a) \vee \neg (\neg b \wedge \bigcirc a)
+                  \]
+                  \[
+                  ((b \wedge \bigcirc a ) \rightarrow \bigcirc \bigcirc \Box a) \vee (b \vee \bigcirc \neg a)
+                  \]
+
+
+
+          \end{enumerate}
+    \item
+          The first stage of LTL model checking is to negate the LTL formula $\Psi = \Box(b \rightarrow \bigcirc a)$:
+
+          \begin{align*}
+            \neg \Psi &= \neg\Box(b \rightarrow \bigcirc a) \\
+                &= \Diamond \neg( b \rightarrow \bigcirc a ) \\
+                &= \Diamond \neg (\neg b \vee \bigcirc a)\\
+                &= \Diamond ( b \wedge \bigcirc \neg a )
+          \end{align*}
+
+          Our negation makes syntactic sense in this case, to prove that \textit{``every $b$ is immedately followed by an $a$''} does not hold, one must find a trace whereby a $b$ is immediately followed by $\neg a$.
+
+          We then construct an NFA, $\mathcal{A}_{\Psi}$ of this formula:
+
+          \begin{center}
+            \begin{tikzpicture}
+              \node [lts,initial] (q0) {$q_{0}$};
+              \node [lts,right of=q0] (q1) {$q_{1}$};
+              \node [lts,right of=q1,accepting] (q2) {$q_{2}$};
+
+              \draw (q0) edge[loop above] node {$\neg b$ } (q0);
+              \draw (q0) edge[->,bend left] node[above] {$b$} (q1);
+              \draw (q1) edge[->,bend left] node[above] {$a \wedge \neg b$} (q0);
+              \draw (q1) edge[->,loop above] node[above] {$b$} (q1);
+              \draw (q1) edge node[above] {$\neg a$} (q2);
+            \end{tikzpicture}
+          \end{center}
+
+
+          We then take the product of the LTS given in the question and the NFA $\mathcal{A}_{\Psi}$, defined above, to produce:
+
+          $\mathcal{A}_{\Psi} \otimes M$, where $M$ is the LTS given in the question:
+
+
+          \begin{center}
+            \begin{tikzpicture}
+              \node [prod,initial] (s0q0) {$s_{0}q_{0}$};
+              \node [prod, right of=s0q0] (s1q1) {$s_{1}q_{1}$};
+              \node [prod, right of=s1q1] (s2q1) {$s_{2}q_{1}$};
+              \node [prod,right of=s2q1, accepting, label=right:{$ \{ \texttt{accept}  \} $}] (s0q2) {$s_{0}q_{2}$};
+
+              \draw (s0q0) edge (s1q1);
+              \draw (s1q1) edge[bend left] (s2q1);
+              \draw (s2q1) edge[bend left] (s1q1);
+              \draw (s2q1) edge (s0q2);
+            \end{tikzpicture}
+          \end{center}
+          \todo[inline]{check NFA prod}
+
+          Above you can see that the product of the NFA and LTS has an \textit{accepting} state, meaning there exists a trace that satisfies the negation of the property, i.e. the property does not hold for all possible traces.
+
+
+  \end{enumerate}
 \end{question}
 
 \vspace*{1cm}
