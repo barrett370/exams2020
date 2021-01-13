@@ -5,7 +5,6 @@
 \newenvironment{mathprooftree}
   {\varwidth{.9\textwidth}\centering\leavevmode}
   {\DisplayProof\endvarwidth}
-
 \usepackage{graphicx}
 \graphicspath{{./imgs/}}
 \usepackage{amsmath,amssymb,amsfonts,varwidth}
@@ -43,7 +42,9 @@
     initial text = {},
     node distance=2.5cm,
     double distance=2pt,
-}
+  }
+\tikzset{every loop/.style={min distance=7mm,in=120,out=60,looseness=2}}
+
 
 % put your student ID here instead of 1234567
 
@@ -64,6 +65,7 @@
 
 \pagestyle{fancyplain}
 \setlength{\headheight}{15pt}
+\setlength{\headsep}{0.5cm}
 \lhead{\fancyplain{ID \thestudentid}{ID \thestudentid}}
 \rhead{\fancyplain{\theexam}{\theexam}}
 \lfoot{\fancyplain{ID \thestudentid}{ID \thestudentid}}
@@ -91,6 +93,8 @@ the preamble, write your answers below.
           \]
           \begin{enumerate}[label= (\roman*)]
             \item
+                  Prove $M$ is well typed
+
                   \begin{prooftree}
 
                     \AXC{}
@@ -111,6 +115,7 @@ the preamble, write your answers below.
 
                     \AXC{$\Pi_{1}$}
 
+                    \RL{\texttt{ITE} }
                     \TIC{$\Gamma, y:\mathbb{B} \vdash \texttt{if } x \texttt{ then } f y \texttt{ else } g y: \mathbb{B}$}
                     \RL{\texttt{ABS} }
                     \UIC{$\Gamma, x:\mathbb{B} \vdash \lambda y: \mathbb{B}. \texttt{if } x \texttt{ then } f y \texttt{ else } g y: \mathbb{B}\rightarrow \mathbb{B}$}
@@ -148,10 +153,11 @@ the preamble, write your answers below.
                   \[
                     G = \lambda y: \mathbb{B}. \texttt{if } y \texttt{ then true}  \texttt{ else false} : \mathbb{B}\rightarrow \mathbb{B}
                   \]
-                  Alternatively, $G$ can simply be defined as the boolean identity function $\lambda y: \mathbb{B}. y : \mathbb{B}\rightarrow \mathbb{B}$. This is the definition I will use in later parts of the question.
+                  Alternatively, $G$ can simply be defined as the boolean identity function $\lambda y: \mathbb{B}. y : \mathbb{B}\rightarrow \mathbb{B}$. This is the definition I will use in latter parts of the question.
 
             \item
-                  The fact that this expression is well-typed under the Simply-typed $\lambda$-Calculus means \todo[inline]{Finish this question}
+                  As the expression $(M F G \texttt{false } \texttt{true } )$ has type $\mathbb{B}$, we can be sure when using it that if we provide it to a function of type $\mathbb{B} \rightarrow T$ the evaluation will terminate and we will be returned a value of type $T$
+
             \item
 
                   \begin{equation}
@@ -159,9 +165,7 @@ the preamble, write your answers below.
                       \AXC{}
                       \RL{$\beta$}
                       \UIC{$\lambda f: \mathbb{B}\rightarrow \mathbb{B}. M_{1} F \rightarrow_{v} \lambda g: \mathbb{B}\rightarrow \mathbb{B} \lambda x:\mathbb{B} \texttt{if } x \texttt{ then } Fy \texttt{ else } gy $}
-                      \RL{$\texttt{CTX} _{\bullet G}$}
-                      \UIC{\stackanchor{$\lambda f: \mathbb{B}\rightarrow \mathbb{B}.M_{1} F G \rightarrow_{v}$}{$(\lambda g: \mathbb{B}\rightarrow \mathbb{B} \lambda x:\mathbb{B} \texttt{if } x \texttt{ then } Fy \texttt{ else } gy)G $}}
-                      \RL{$\texttt{CTX}_{(\bullet)\texttt{false } \texttt{true } }$}
+                      \RL{$\texttt{CTX}_{(\bullet G)\texttt{false } \texttt{true } }$}
                       \UIC{\stackanchor{$(M F G) \texttt{false } \texttt{true }  \rightarrow_{v}$}{$((\lambda g: \mathbb{B}\rightarrow \mathbb{B} \lambda x:\mathbb{B} \texttt{if } x \texttt{ then } Fy \texttt{ else } gy )G) \texttt{false } \texttt{true }$}}
                     \end{mathprooftree}
                   \end{equation}
@@ -170,9 +174,9 @@ the preamble, write your answers below.
                     \begin{mathprooftree}
                       \AXC{}
                       \RL{$\beta$}
-                      \UIC{\stackanchor{$(\lambda g: \mathbb{B}\rightarrow \mathbb{B} \lambda x:\mathbb{B} \texttt{if } x \texttt{ then } Fy \texttt{ else } gy )G \rightarrow_{v} $}{$\lambda x:\mathbb{B}.\lambda y:\mathbb{B}. \texttt{if } x \texttt{ then } Fy \texttt{ else } G y $}}
+                      \UIC{\stackanchor{$(\lambda g: \mathbb{B}\rightarrow \mathbb{B}. \lambda x:\mathbb{B}. \texttt{if } x \texttt{ then } Fy \texttt{ else } gy )G \rightarrow_{v} $}{$\lambda x:\mathbb{B}.\lambda y:\mathbb{B}. \texttt{if } x \texttt{ then } Fy \texttt{ else } G y $}}
                       \RL{$\texttt{CTX} _{(\bullet) \texttt{false } \texttt{true } }$}
-                      \UIC{\stackanchor{$((\lambda g: \mathbb{B}\rightarrow \mathbb{B} \lambda x:\mathbb{B} \texttt{if } x \texttt{ then } Fy \texttt{ else } gy )G) \texttt{false } \texttt{true } \rightarrow_{v} $}{$(\lambda x:\mathbb{B}.\lambda y:\mathbb{B}. \texttt{if } x \texttt{ then } Fy \texttt{ else } G y) \texttt{false } \texttt{true }  $}}
+                      \UIC{\stackanchor{$((\lambda g: \mathbb{B}\rightarrow \mathbb{B}. \lambda x:\mathbb{B}. \texttt{if } x \texttt{ then } Fy \texttt{ else } gy )G) \texttt{false } \texttt{true } \rightarrow_{v} $}{$(\lambda x:\mathbb{B}.\lambda y:\mathbb{B}. \texttt{if } x \texttt{ then } Fy \texttt{ else } G y) \texttt{false } \texttt{true }  $}}
                     \end{mathprooftree}
                   \end{equation}
 
@@ -180,9 +184,9 @@ the preamble, write your answers below.
                     \begin{mathprooftree}
                       \AXC{}
                       \RL{$\beta$}
-                      \UIC{\stackanchor{$(\lambda x:\mathbb{B}.\lambda y:\mathbb{B}. \texttt{if } x \texttt{ then } Fy \texttt{ else } G y) \texttt{false } \rightarrow_{v}$}{$\lambda y:\mathbb{B} \texttt{if } \texttt{false}  \texttt{ then } F y \texttt{ else } G y $}}
+                      \UIC{\stackanchor{$(\lambda x:\mathbb{B}.\lambda y:\mathbb{B}. \texttt{if } x \texttt{ then } Fy \texttt{ else } G y) \texttt{false } \rightarrow_{v}$}{$\lambda y:\mathbb{B}. \texttt{if } \texttt{false}  \texttt{ then } F y \texttt{ else } G y $}}
                       \RL{$\texttt{CTX} _{\bullet \texttt{true } }$}
-                      \UIC{\stackanchor{$(\lambda x:\mathbb{B}.\lambda y:\mathbb{B}. \texttt{if } x \texttt{ then } Fy \texttt{ else } gy) \texttt{false } \texttt{true } \rightarrow_{v}  $}{$(\lambda y:\mathbb{B} \texttt{if } \texttt{false}  \texttt{ then } F y \texttt{ else } G y) \texttt{true }  $}}
+                      \UIC{\stackanchor{$(\lambda x:\mathbb{B}.\lambda y:\mathbb{B}. \texttt{if } x \texttt{ then } Fy \texttt{ else } G y) \texttt{false } \texttt{true } \rightarrow_{v}  $}{$(\lambda y:\mathbb{B}. \texttt{if } \texttt{false}  \texttt{ then } F y \texttt{ else } G y) \texttt{true }  $}}
                     \end{mathprooftree}
                   \end{equation}
 
@@ -190,7 +194,7 @@ the preamble, write your answers below.
                     \begin{mathprooftree}
                       \AXC{}
                       \RL{$\beta$}
-                      \UIC{\stackanchor{$(\lambda y:\mathbb{B} \texttt{if } \texttt{false}  \texttt{ then } F y \texttt{ else } G y) \texttt{true } \rightarrow_{v}$}{$\texttt{if } \texttt{false }  \texttt{ then } F \texttt{true }  \texttt{ else } G \texttt{true }    $}}
+                      \UIC{\stackanchor{$(\lambda y:\mathbb{B}. \texttt{if } \texttt{false}  \texttt{ then } F y \texttt{ else } G y) \texttt{true } \rightarrow_{v}$}{$\texttt{if } \texttt{false }  \texttt{ then } F \texttt{true }  \texttt{ else } G \texttt{true }    $}}
                     \end{mathprooftree}
                   \end{equation}
 
@@ -398,14 +402,13 @@ the preamble, write your answers below.
                                    &\texttt{ as }  \\ &\exists \texttt{stack}. \texttt{stack} \times ( \mathbb{N} \rightarrow \texttt{stack} \rightarrow \texttt{stack} \times \\
                                    &( \texttt{stack} \rightarrow \mathbb{N} \rightarrow \mathbb{N}  \times \texttt{stack} \rightarrow \texttt{stack}  )   )
                   \end{align*}
-                  \todo{Check type of ``pop''}
 
                   Where:
 
                   \begin{itemize}
                     \item $s_{0} = \lambda \alpha .\lambda f: \mathbb{N} \rightarrow \alpha \rightarrow \alpha . \lambda x: \alpha . x$
                     \item $\texttt{Stack } = \forall \alpha.( \mathbb{N} \rightarrow \alpha \rightarrow \alpha ) \rightarrow \alpha \rightarrow \alpha$
-                          \item \texttt{push, peek} and \texttt{pop}   are defined the same as in the exam booklet, over (concrete) the \texttt{Stack} type.
+                          \item \texttt{push, peek} and \texttt{pop}   are defined the same as in the exam booklet, over the (concrete) \texttt{Stack} type.
                   \end{itemize}
           \end{enumerate}
   \end{enumerate}
@@ -528,11 +531,30 @@ the preamble, write your answers below.
 
 
           \item
-                Because of the fact $\forall x, x*0 = 0*x = 0$, both $Y(\lambda f.\lambda x.f(x)*0)1$ and $Y(\lambda f.\lambda x.0*f(x))1$ can be optimised to $0$.
-                In the first case, $f(x) * 0$ can be replaced with $0$ where we let $f(x) = x$ in the above fact.
-                In the second case, $0*f(x)$ can be replaced with $0$ where we let $f(x) = x$ in the above fact.
+                \textit{I feel like this is some sort of trick question, so I am going to explain my entire thought process}
 
-                \todo[inline]{is this a trick question, check notes on code optimisation}
+
+                From a purely mathematical point of view, both $Y(\lambda f.\lambda x.f(x)*0)1$ and $Y(\lambda f.\lambda x.0*f(x))1$ can be optimised to $0$. However, I doubt any impure language would implement this optimisation. The possible side effects of executing $f(x)$ would be lost if it were removed. For instance, take the following code in Rust:
+
+                \begin{minted}{rust}
+                  fn f(_x:i32) -> i32{
+                    println!("Some desired side effect");
+                    2
+                  }
+
+                  fn main() {
+
+                    let x = 2;
+                    let res = 0*f(x);
+                    println!("{}",res);
+
+                  }
+                \end{minted}
+
+                Here we can see $f$ to have desirable side effects. The code produces the result $\texttt{Some desired side effect }$ followed by $0$, indicating that this optimisation is not made, keeping our desirable side effects.
+
+                Our question however, is concerning the $\lambda$-Calculus, a mathematically pure language. Therefore, this optimisation would not lose any desirable side effects, as they are impossible, allowing us to optimise both expressions to $0$.
+
 
           \item
                 Yes $Y(\lambda f.\lambda x.0)1$ can be optimised to $0$. This is the case as the result of evaluating the expression is not dependant on either of the parameters $f$ or $x$.
@@ -556,17 +578,17 @@ the preamble, write your answers below.
             \item
                   $a$ and $b$ are simultaneously true only a finite number of times.
 
-                  This is a \textit{liveness property} as only an infinite path could satisfy $\Box(a \wedge b)$ and given such a path, we could easily extend it with a single state which satisfied $\neg (a \wedge b)$ to satisfy this property. In LTL it can be represented as: \todo[inline]{Check}
+                  This is a \textit{liveness property} as only an infinite path could satisfy $\Box(a \wedge b)$ and given a path which violates it, we could easily extend it with a single state which satisfied $\neg (a \wedge b)$ to satisfy this property. In LTL it can be represented as:
 
 
                   \[
-                  \neg \Box (a \wedge b)
+                  \Diamond \Box \neg (a \wedge b)
                   \]
 
             \item
                   every $b$ is immediately followed by an $a$
 
-                  This is an example of a \textit{safety property} as any violation of this property would have a state satisfying $b$ (immediately) followed by a state satisfying $\neg a$. Such a trace cannot be extended to satisfy the property. It can be written in LTL as:\todo[inline]{check wording}
+                  This is an example of a \textit{safety property} as any trace violating this property would have a finite prefix in which a state satisfying $b$ is (immediately) followed by a state satisfying $\neg a$. Such a trace cannot be extended to satisfy the property. It can be written in LTL as
 
 
                   \[
@@ -574,9 +596,10 @@ the preamble, write your answers below.
                   \]
 
             \item
-                  exactly one of $a$ or $b$ (but not both) is eventually true. This is a \textit{liveness property} as given a trace in which both $a$ and $b$ appear true at least once, no suffix can be added to extend the trace s.t. it satisfies this property.
+                  exactly one of $a$ or $b$ (but not both) is eventually true.
 
-                  \todo[inline]{check}
+                  This is not a \textit{liveness property} as given a trace violating this property by including a state in which $a$ and $b$ we cannot add a suffix s.t. it no longer violates the property. Equally, it is not \textit{safety property} as an infinite path in which neither $a$ or $b$ is true does not satisfy the property and yet has no bad prefix.
+
                   \[
                   (\Diamond a \vee \Diamond b) \wedge (a \rightarrow \Box \neg b) \wedge (b \rightarrow \Box \neg a)
                   \]
@@ -584,16 +607,12 @@ the preamble, write your answers below.
             \item
                   if $a$ ever becomes true, then it remains true forever, and this is immediately preceded by a state where $b$ was true.
 
-                  This is a \textit{liveness property} as given a trace that violates this property such as $a,b$, the trace cannot be extended with any suffix s.t. the property now holds.
+
+                  This is a \textit{safety property}  as any violation would have a trace in which either the first occurrence of $a$ was not immediately preceded by a $b$ or the first occurrence of $a$ is eventually followed by a state in which $a$ is not true.
 
                   \[
                   ((b \wedge \bigcirc a ) \rightarrow \bigcirc \bigcirc \Box a) \vee \neg (\neg b \wedge \bigcirc a)
                   \]
-                  \[
-                  ((b \wedge \bigcirc a ) \rightarrow \bigcirc \bigcirc \Box a) \vee (b \vee \bigcirc \neg a)
-                  \]
-
-
 
           \end{enumerate}
     \item
@@ -606,7 +625,7 @@ the preamble, write your answers below.
                 &= \Diamond ( b \wedge \bigcirc \neg a )
           \end{align*}
 
-          Our negation makes syntactic sense in this case, to prove that \textit{``every $b$ is immedately followed by an $a$''} does not hold, one must find a trace whereby a $b$ is immediately followed by $\neg a$.
+          i.e. to prove that \textit{``every $b$ is immediately followed by an $a$''} does not hold, one must find a trace whereby a $b$ is immediately followed by $\neg a$.
 
           We then construct an NFA, $\mathcal{A}_{\Psi}$ of this formula:
 
@@ -643,13 +662,55 @@ the preamble, write your answers below.
               \draw (s2q1) edge (s0q2);
             \end{tikzpicture}
           \end{center}
-          \todo[inline]{check NFA prod}
 
           Above you can see that the product of the NFA and LTS has an \textit{accepting} state, meaning there exists a trace that satisfies the negation of the property, i.e. the property does not hold for all possible traces.
 
+    \item
+          The revised property can be expressed as:
+
+          \[
+            \Box (a \rightarrow \Diamond^{\leq k} b)
+          \]
+
+          A simple negation of this property, for checking, could be:
+
+          \[
+          \Diamond (a \wedge \neg \Diamond^{\leq k}b)
+          \]
+
+
+          In order to check this property over the LTS in the question, we would require a mechanism of \textit{counting} occurrences of non-$b$ states following an $a$.
+
+          A simple implementation of this would be, for a fixed $k$, to add $k$ extra states to our NFA, where in each state ($1..k-1$) we could either continue waiting or return to the initial state. The final state could either find a $b$ and return to the initial state or terminate in an error state.
+
+          An example for $k=2$ could be:
+
+
+          \begin{center}
+            \begin{tikzpicture}
+              \node [lts,initial] (q0) {$q_{0}$};
+              \node [lts,right of=q0] (q1) {$q_{1}$};
+              \node [lts,right of=q1] (q2) {$q_{2}$};
+              \node [lts,right of=q2,accepting] (q3) {$q_{3}$};
+
+              \draw (q0) edge[loop above] node {$\neg a$ } (q0);
+              \draw (q0) edge[->,bend left] node[above] {$a$} (q1);
+              \draw (q1) edge[->,bend left] node[above] {$b$} (q0);
+              \draw (q1) edge[->] node[above] {$\neg b$} (q2);
+              \draw (q2) edge[bend left] node[below] {$b$} (q0);
+              \draw (q2) edge[->] node[above] {$\neg b$} (q3);
+
+            \end{tikzpicture}
+          \end{center}
+
+          The product of the above NFA and the given LTS would show whether the property could be violated.
+
+          In a more general sense, the $\Diamond^{\leq k}\psi$ operator could be incorporated into LTL model checking by constructing it's negation as a series of $k$ linear states followed by a terminating state in which if $\psi$ was true the NFA returned to the initial state and if $\psi$ was not true it would continue to the next state until it reached the final, accepting, position.
 
   \end{enumerate}
 \end{question}
+
+\newpage
 
 \vspace*{1cm}
 \pagebreak[3]\fbox{%
@@ -684,3 +745,8 @@ the preamble, write your answers below.
   \end{minipage}%
 }
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
