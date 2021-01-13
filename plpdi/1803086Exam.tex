@@ -470,7 +470,7 @@ the preamble, write your answers below.
                   \includegraphics[scale=0.6]{2bi4.png}
                 \end{center}
 
-                Again finding two values on the LHS application, a reduction is performed, stripping the outer $\lambda $ from $\lambda f.\lambda x.0$, discarding the $Y$ combinator:
+                Again finding two values on the LHS application, a reduction is performed, stripping the outer $\lambda $ from $\lambda f.\lambda x.0$, discarding the RHS.
 
 
                 \begin{center}
@@ -663,7 +663,7 @@ the preamble, write your answers below.
             \end{tikzpicture}
           \end{center}
 
-          Above you can see that the product of the NFA and LTS has an \textit{accepting} state, meaning there exists a trace that satisfies the negation of the property, i.e. the property does not hold for all possible traces.
+          Above you can see that the product of the NFA and LTS has an \textit{accept} state, meaning there exists a trace that satisfies the negation of the property, i.e. the property does not hold for all possible traces.
 
     \item
           The revised property can be expressed as:
@@ -681,7 +681,7 @@ the preamble, write your answers below.
 
           In order to check this property over the LTS in the question, we would require a mechanism of \textit{counting} occurrences of non-$b$ states following an $a$.
 
-          A simple implementation of this would be, for a fixed $k$, to add $k$ extra states to our NFA, where in each state ($1..k-1$) we could either continue waiting or return to the initial state. The final state could either find a $b$ and return to the initial state or terminate in an error state.
+          A simple implementation of this would be, for a fixed $k$, to add $k$ extra states to our NFA, where in each state ($1..k$) we could either continue waiting or return to the initial state. The final state could either find a $b$ and return to the initial state or terminate in an error state.
 
           An example for $k=2$ could be:
 
@@ -705,7 +705,7 @@ the preamble, write your answers below.
 
           The product of the above NFA and the given LTS would show whether the property could be violated.
 
-          In a more general sense, the $\Diamond^{\leq k}\psi$ operator could be incorporated into LTL model checking by constructing it's negation as a series of $k$ linear states followed by a terminating state in which if $\psi$ was true the NFA returned to the initial state and if $\psi$ was not true it would continue to the next state until it reached the final, accepting, position.
+          In a more general sense, the $\Diamond^{\leq k}\psi$ operator could be incorporated into LTL model checking by constructing it's negation as a series of $k$ linear states followed by a terminating state. In each of these $k$ states, if $\psi$ was true the NFA will return to the initial state and if $\psi$ was not true it would continue to the next state until it reached the final, accepting, position.
 
   \end{enumerate}
 \end{question}
