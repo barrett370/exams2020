@@ -156,7 +156,7 @@ the preamble, write your answers below.
                   Alternatively, $G$ can simply be defined as the boolean identity function $\lambda y: \mathbb{B}. y : \mathbb{B}\rightarrow \mathbb{B}$. This is the definition I will use in latter parts of the question.
 
             \item
-                  As the expression $(M F G \texttt{false } \texttt{true } )$ has type $\mathbb{B}$, we can be sure when using it that if we provide it to a function of type $\mathbb{B} \rightarrow T$ the evaluation will terminate and we will be returned a value of type $T$
+                  As the expression $(M F G \texttt{false } \texttt{true } )$ has type $\mathbb{B}$, we can be sure when using it that if we provide it to a function of type $\mathbb{B} \rightarrow T$ the evaluation will terminate and we will be returned a value of type $T$. Typed expressions do not get \textit{stuck}.
 
             \item
 
@@ -215,7 +215,7 @@ the preamble, write your answers below.
                   \end{equation}
                   Where:
                   \begin{itemize}
-                    \item $M_{1}$ is as defined the same as above.
+                    \item $M_{1}$ is as defined the same as in a)i) .
                   \end{itemize}
 
                   $ \texttt{true } \in V$, $\therefore$ $(MFG) \texttt{false } \texttt{true } $ computes to a value.
@@ -392,7 +392,7 @@ the preamble, write your answers below.
                   \begin{prooftree}
                     \AXC{}
                     \RL{$\beta$}
-                    \UIC{$Im \equiv (\lambda x: \mathbb{N}. x)n \rightarrow_{v} m$}
+                    \UIC{$Im \equiv (\lambda x: \mathbb{N}. x)m \rightarrow_{v} m$}
                   \end{prooftree}
 
             \item an abstract \textit{stack} datatype can be defined as follows:
@@ -570,13 +570,15 @@ the preamble, write your answers below.
     \item
           \begin{enumerate}[label= (\roman*)]
             \item
-                  $a$ is true whenever $b$ is true. This is an example of an invariant, (a subset of \textit{safety properties}) as it can only be verified by checking $b \rightarrow a$ in each state individually. It can be represented in LTL as:
+                  \textit{$a$ is true whenever $b$ is true.}
+
+                  This is an example of an invariant, (a subset of \textit{safety properties}) as it can only be verified by checking $b \rightarrow a$ in each state individually. It can be represented in LTL as:
                   \[
                   \Box (b \rightarrow a)
                   \]
 
             \item
-                  $a$ and $b$ are simultaneously true only a finite number of times.
+                  \textit{$a$ and $b$ are simultaneously true only a finite number of times.}
 
                   This is a \textit{liveness property} as only an infinite path could satisfy $\Box(a \wedge b)$ and given a path which violates it, we could easily extend it with a single state which satisfied $\neg (a \wedge b)$ to satisfy this property. In LTL it can be represented as:
 
@@ -586,7 +588,7 @@ the preamble, write your answers below.
                   \]
 
             \item
-                  every $b$ is immediately followed by an $a$
+                  \textit{every $b$ is immediately followed by an $a$}
 
                   This is an example of a \textit{safety property} as any trace violating this property would have a finite prefix in which a state satisfying $b$ is (immediately) followed by a state satisfying $\neg a$. Such a trace cannot be extended to satisfy the property. It can be written in LTL as
 
@@ -596,16 +598,16 @@ the preamble, write your answers below.
                   \]
 
             \item
-                  exactly one of $a$ or $b$ (but not both) is eventually true.
+                  \textit{exactly one of $a$ or $b$ (but not both) is eventually true.}
 
-                  This is not a \textit{liveness property} as given a trace violating this property by including a state in which $a$ and $b$ we cannot add a suffix s.t. it no longer violates the property. Equally, it is not \textit{safety property} as an infinite path in which neither $a$ or $b$ is true does not satisfy the property and yet has no bad prefix.
+                  This is not a \textit{liveness property} as, given a trace violating this property by including a state in which $a$ and $b$ are true, we cannot add a suffix s.t. it no longer violates the property. Equally, it is not \textit{safety property} as an infinite path in which neither $a$ or $b$ is true does not satisfy the property and yet has no bad prefix.
 
                   \[
                   (\Diamond a \vee \Diamond b) \wedge (a \rightarrow \Box \neg b) \wedge (b \rightarrow \Box \neg a)
                   \]
 
             \item
-                  if $a$ ever becomes true, then it remains true forever, and this is immediately preceded by a state where $b$ was true.
+                  \textit{if $a$ ever becomes true, then it remains true forever, and this is immediately preceded by a state where $b$ was true.}
 
 
                   This is a \textit{safety property}  as any violation would have a trace in which either the first occurrence of $a$ was not immediately preceded by a $b$ or the first occurrence of $a$ is eventually followed by a state in which $a$ is not true.
